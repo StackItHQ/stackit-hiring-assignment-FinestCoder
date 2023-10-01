@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    /* Add CSS styles as needed for your UI */
+    .drop-area {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="drop-area" id="dropArea">
+    <p>Drag and drop a CSV file here</p>
+    <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+  </div>
+  
+  <div>
+    <h3>Select Columns to Import:</h3>
+    <div id="columnCheckboxes">
+      <!-- Column checkboxes will be dynamically added here -->
+    </div>
+  </div>
+  
+  <button id="importButton" onclick="importCSV()">Import CSV</button>
+
+  <script>
+    // JavaScript code for handling file upload and column selection
+    var csvData = null;
+    var selectedColumns = [];
+
+    // Handle file drop event
+    document.getElementById("dropArea").addEventListener("dragover", function(e) {
+      e.preventDefault();
+      this.classList.add("dragover");
+    });
+
+    document.getElementById("dropArea").addEventListener("dragleave", function(e) {
+      e.preventDefault();
+      this.classList.remove("dragover");
+    });
+
+    document.getElementById("dropArea").addEventListener("drop", function(e) {
+      e.preventDefault();
+      this.classList.remove("dragover");
+      var file = e.dataTransfer.files[0];
+      if (file && file.name.endsWith(".csv")) {
+        readCSVFile(file);
+      }
+    });
+
+    // Handle file input change event
+    document.getElementById("csvFileInput").addEventListener("change", function(e) {
+      var file = e.target.files[0];
+      if (file && file.name.endsWith(".csv")) {
+        readCSVFile(file);
+      }
+    });
+
+    // Read and display CSV data
+    function readCSVFile(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        csvData = e.target.result;
+        document.getElementById("columnCheckboxes").innerHTML = ""; // Clear previous checkboxes
+        var lines = csvData.split("\n");
+        if (lines.length > 0) {
+          var headerRow = lines[0].split(",");
+          for (var i = 0; i < headerRow.length; i++) {
+            var columnName = headerRow[i].trim();
+            var checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.name = "columns";
+            checkbox.value = columnName;
+            checkbox.id = "column" + i;
+            checkbox.checked = true;
+            var label = document.createElement("label");
+            label.htmlFor = "column" + i;
+            label.appendChild(document.createTextNode(columnName));
+            document.getElementById("columnCheckboxes").appendChild(checkbox);
+            document.getElementById("columnCheckboxes").appendChild(label);
+          }
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Handle column selection
+    function importCSV() {
+      selectedColumns = [];
+      var checkboxes = document.getElementsByName("columns");
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          selectedColumns.push(checkboxes[i].value);
+        }
+      }
+
+      // Pass the selected CSV data and columns to Google Apps Script function
+      google.script.run.setCSVData(csvData);
+      google.script.run.setSelectedColumns(selectedColumns);
+
+      // Trigger the importCSVData function in Google Apps Script
+      google.script.run.withSuccessHandler(function(result) {
+        alert(result);
+      }).importCSVData(csvData, selectedColumns);
+    }
+  </script>
+</body>
+</html>
