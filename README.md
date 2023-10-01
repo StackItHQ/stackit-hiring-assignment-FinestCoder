@@ -66,4 +66,15 @@ The Google Apps Script handles the server-side logic within Google Sheets. It cr
 
 The HTML/JavaScript frontend creates a user interface within a modal dialog for users to interact with. Users can either drag and drop a CSV file or select one using a file input. The script reads the CSV file, extracts column names, and dynamically generates checkboxes for column selection. A "Import CSV" button initiates the import process, passing data to the Google Apps Script functions.
 
-Together, these components allow users to easily upload CSV files, select columns for import, and seamlessly import the data into their Google Sheet.
+**My Planned Out Approach**
+
+In these crucial project development steps, I establish the foundation for the CSV file importer:
+
+**Step 1: Create the HTML Structure**
+In this step, I start by crafting an HTML file that defines the layout and components of the web application. I meticulously structure it to include key elements, notably a user-friendly drag-and-drop area for file uploads, checkboxes for column selection, and a prominent import button. These HTML components lay the groundwork for a seamless user experience.
+
+**Step 2: Implement JavaScript Functionality**
+JavaScript is the heart of the project's functionality. In this step, I create a JavaScript file (script.js) to manage the logic. By implementing event listeners, I respond to user actions, such as drag-and-drop events, file input changes, and button clicks. Additionally, I empower the application to read and parse CSV files, dynamically generate checkboxes based on the uploaded file's headers, and efficiently handle the selection and storage of chosen columns.
+
+**Step 3: Set Up Google Apps Script**
+This step is pivotal for integrating the web application with Google Apps Script, enabling powerful data processing capabilities. I initiated a Google Apps Script project from my Google Drive account and crafted two essential functions: setCSVData() and setSelectedColumns(). These functions serve as intermediaries for storing CSV data and selected columns. Furthermore, I created a central processing function, such as importCSVData(), responsible for the core CSV data processing tasks. Leveraging Google Apps Script, I unlock the potential for data manipulation, validation, and customized scripting.
