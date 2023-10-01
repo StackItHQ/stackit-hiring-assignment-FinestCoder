@@ -59,7 +59,7 @@ Feel free to check the discussions tab, you might get something of help there. C
 
 ## Developer's Section 
 
-Name: Ayush Panda 
+Name: Ayush Panda (20BBS0218)
 
 Link for the Project: https://youtu.be/zAIZSAvX1AE
 
