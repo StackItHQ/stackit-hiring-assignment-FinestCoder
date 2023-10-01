@@ -57,7 +57,10 @@ We have a checklist at the bottom of this README file, which you should update a
 ## Got Questions❓
 Feel free to check the discussions tab, you might get something of help there. Check out that tab before reaching out to us. Also, did you know, the internet is a great place to explore 😛
 
-## Developer's Section
+## Developer's Section 
+
+Name: Ayush Panda 
+
 Link for the Project: https://youtu.be/zAIZSAvX1AE
 
 The provided code consists of two parts: a Google Apps Script and an HTML/JavaScript frontend.
