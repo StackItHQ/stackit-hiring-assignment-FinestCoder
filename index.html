@@ -25,12 +25,30 @@
     </div>
   </div>
   
+  <div>
+    <h3>Filter Data:</h3>
+    <label for="filterColumn">Select a Column:</label>
+    <select id="filterColumn"></select>
+    <label for="filterCondition">Condition:</label>
+    <select id="filterCondition">
+      <option value="equals">Equals</option>
+      <option value="contains">Contains</option>
+      <!-- Add more filter conditions as needed -->
+    </select>
+    <label for="filterValue">Value:</label>
+    <input type="text" id="filterValue">
+    <button id="filterButton" onclick="filterData()">Apply Filter</button>
+  </div>
+  
   <button id="importButton" onclick="importCSV()">Import CSV</button>
 
   <script>
-    // JavaScript code for handling file upload and column selection
+    // JavaScript code for handling file upload, column selection, and data filtering
     var csvData = null;
     var selectedColumns = [];
+    var filterColumn = document.getElementById("filterColumn");
+    var filterCondition = document.getElementById("filterCondition");
+    var filterValue = document.getElementById("filterValue");
 
     // Handle file drop event
     document.getElementById("dropArea").addEventListener("dragover", function(e) {
@@ -82,6 +100,12 @@
             label.appendChild(document.createTextNode(columnName));
             document.getElementById("columnCheckboxes").appendChild(checkbox);
             document.getElementById("columnCheckboxes").appendChild(label);
+
+            // Add column as an option in the filter dropdown
+            var option = document.createElement("option");
+            option.value = columnName;
+            option.text = columnName;
+            filterColumn.appendChild(option);
           }
         }
       };
@@ -89,16 +113,80 @@
     }
 
     // Handle column selection
-    function importCSV() {
-      selectedColumns = [];
+    document.getElementById("columnCheckboxes").addEventListener("change", function(e) {
       var checkboxes = document.getElementsByName("columns");
+      selectedColumns = [];
       for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
           selectedColumns.push(checkboxes[i].value);
         }
       }
+    });
 
-      // Pass the selected CSV data and columns to Google Apps Script function
+    // Handle data filtering
+    function filterData() {
+      var selectedFilterColumn = filterColumn.value;
+      var selectedFilterCondition = filterCondition.value;
+      var filterText = filterValue.value;
+
+      if (!csvData) {
+        alert('Please upload a CSV file first.');
+        return;
+      }
+
+      // Parse the CSV data into rows and columns
+      var rows = csvData.split('\n');
+      var headerRow = rows[0].split(',');
+      var columnIndex = headerRow.indexOf(selectedFilterColumn);
+
+      if (columnIndex === -1) {
+        alert('Selected column not found in the CSV data.');
+        return;
+      }
+
+      var filteredRows = [];
+      filteredRows.push(headerRow); // Add the header row to the filtered data
+
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i].split(',');
+        if (row.length > columnIndex) {
+          var cellValue = row[columnIndex].trim();
+          var shouldInclude = false;
+
+          // Apply the selected filter condition
+          switch (selectedFilterCondition) {
+            case 'equals':
+              shouldInclude = cellValue === filterText;
+              break;
+            case 'contains':
+              shouldInclude = cellValue.includes(filterText);
+              break;
+            // Add more filter conditions as needed
+          }
+
+          if (shouldInclude) {
+            filteredRows.push(row);
+          }
+        }
+      }
+
+      // Update the CSV data with the filtered rows
+      csvData = filteredRows.map(function (row) {
+        return row.join(',');
+      }).join('\n');
+
+      // Display or update the filtered data as needed
+      // For example, you can replace the contents of a <textarea> or display it in a table.
+      // You can also alert the user with the filtered data.
+
+      alert('Data filtered successfully.');
+    }
+
+    // Handle the import button click
+    function importCSV() {
+      filterData(); // Apply filtering before importing
+
+      // Pass the selected CSV data, columns, and filtered data to Google Apps Script function
       google.script.run.setCSVData(csvData);
       google.script.run.setSelectedColumns(selectedColumns);
 

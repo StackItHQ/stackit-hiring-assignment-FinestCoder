@@ -1,6 +1,7 @@
-// Global variables to store CSV data and selected columns
+// Global variables to store CSV data, selected columns, and filtered data
 var csvData = null;
 var selectedColumns = [];
+var filteredData = null;
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
@@ -19,30 +20,14 @@ function showDialog() {
 function importCSVData(csv, columns) {
   // Process the CSV data and selected columns and import them into the Google Sheet.
   try {
-    var parsedCSV = Utilities.parseCsv(csv);
+    // Use the filtered data if available; otherwise, use the original CSV data
+    var dataToImport = filteredData || csv;
+
+    var parsedCSV = Utilities.parseCsv(dataToImport);
     var sheet = SpreadsheetApp.getActiveSheet();
-    var headerRow = parsedCSV[0];
-    
-    // Validate and ensure selected columns are within the bounds of the CSV
-    var selectedIndices = [];
-    for (var i = 0; i < columns.length; i++) {
-      var columnIndex = headerRow.indexOf(columns[i]);
-      if (columnIndex !== -1) {
-        selectedIndices.push(columnIndex);
-      }
-    }
-    
+
     // Import data into the Google Sheet
-    var dataToImport = [];
-    for (var rowIdx = 1; rowIdx < parsedCSV.length; rowIdx++) {
-      var rowData = [];
-      for (var colIdx = 0; colIdx < selectedIndices.length; colIdx++) {
-        rowData.push(parsedCSV[rowIdx][selectedIndices[colIdx]]);
-      }
-      dataToImport.push(rowData);
-    }
-    
-    sheet.getRange(sheet.getLastRow() + 1, 1, dataToImport.length, dataToImport[0].length).setValues(dataToImport);
+    sheet.getRange(sheet.getLastRow() + 1, 1, parsedCSV.length, parsedCSV[0].length).setValues(parsedCSV);
     
     return 'Import successful!';
   } catch (error) {
@@ -58,10 +43,18 @@ function setSelectedColumns(columns) {
   selectedColumns = columns;
 }
 
+function setFilteredData(data) {
+  filteredData = data;
+}
+
 function getCSVData() {
   return csvData;
 }
 
 function getSelectedColumns() {
   return selectedColumns;
+}
+
+function getFilteredData() {
+  return filteredData;
 }
