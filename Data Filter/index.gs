@@ -4,16 +4,16 @@ var filteredData = null;
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('CSV Data Filter')
-      .addItem('Import CSV', 'showDialog')
-      .addToUi();
+  ui.createMenu("CSV Data Filter")
+    .addItem("Import CSV", "showDialog")
+    .addToUi();
 }
 
 function showDialog() {
-  var htmlOutput = HtmlService.createHtmlOutputFromFile('index')
-      .setWidth(400)
-      .setHeight(300);
-  SpreadsheetApp.getUi().showModalDialog(htmlOutput, 'CSV Import');
+  var htmlOutput = HtmlService.createHtmlOutputFromFile("index")
+    .setWidth(400)
+    .setHeight(300);
+  SpreadsheetApp.getUi().showModalDialog(htmlOutput, "CSV Import");
 }
 
 function importCSVData(csv, columns) {
@@ -26,11 +26,18 @@ function importCSVData(csv, columns) {
     var sheet = SpreadsheetApp.getActiveSheet();
 
     // Import data into the Google Sheet
-    sheet.getRange(sheet.getLastRow() + 1, 1, parsedCSV.length, parsedCSV[0].length).setValues(parsedCSV);
-    
-    return 'Import successful!';
+    sheet
+      .getRange(
+        sheet.getLastRow() + 1,
+        1,
+        parsedCSV.length,
+        parsedCSV[0].length
+      )
+      .setValues(parsedCSV);
+
+    return "Import successful!";
   } catch (error) {
-    return 'Error: ' + error.message;
+    return "Error: " + error.message;
   }
 }
 

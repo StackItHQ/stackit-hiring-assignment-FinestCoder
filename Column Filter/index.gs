@@ -3,16 +3,16 @@ var selectedColumns = [];
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('CSV Column Filter')
-      .addItem('Import CSV', 'showDialog')
-      .addToUi();
+  ui.createMenu("CSV Column Filter")
+    .addItem("Import CSV", "showDialog")
+    .addToUi();
 }
 
 function showDialog() {
-  var htmlOutput = HtmlService.createHtmlOutputFromFile('index')
-      .setWidth(400)
-      .setHeight(300);
-  SpreadsheetApp.getUi().showModalDialog(htmlOutput, 'CSV Import');
+  var htmlOutput = HtmlService.createHtmlOutputFromFile("index")
+    .setWidth(400)
+    .setHeight(300);
+  SpreadsheetApp.getUi().showModalDialog(htmlOutput, "CSV Import");
 }
 
 function importCSVData(csv, columns) {
@@ -21,7 +21,7 @@ function importCSVData(csv, columns) {
     var parsedCSV = Utilities.parseCsv(csv);
     var sheet = SpreadsheetApp.getActiveSheet();
     var headerRow = parsedCSV[0];
-    
+
     // Validate
     var selectedIndices = [];
     for (var i = 0; i < columns.length; i++) {
@@ -30,7 +30,7 @@ function importCSVData(csv, columns) {
         selectedIndices.push(columnIndex);
       }
     }
-    
+
     // Import data into the Google Sheet
     var dataToImport = [];
     for (var rowIdx = 1; rowIdx < parsedCSV.length; rowIdx++) {
@@ -40,12 +40,19 @@ function importCSVData(csv, columns) {
       }
       dataToImport.push(rowData);
     }
-    
-    sheet.getRange(sheet.getLastRow() + 1, 1, dataToImport.length, dataToImport[0].length).setValues(dataToImport);
-    
-    return 'Import successful!';
+
+    sheet
+      .getRange(
+        sheet.getLastRow() + 1,
+        1,
+        dataToImport.length,
+        dataToImport[0].length
+      )
+      .setValues(dataToImport);
+
+    return "Import successful!";
   } catch (error) {
-    return 'Error: ' + error.message;
+    return "Error: " + error.message;
   }
 }
 
