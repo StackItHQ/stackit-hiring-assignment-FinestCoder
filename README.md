@@ -58,7 +58,8 @@ We have a checklist at the bottom of this README file, which you should update a
 Feel free to check the discussions tab, you might get something of help there. Check out that tab before reaching out to us. Also, did you know, the internet is a great place to explore 😛
 
 ## Developer's Section
-*Add your video here, and your approach to the problem (optional). Leave some comments for us here if you want, we will be reading this :)*
+Link for the Project: https://youtu.be/zAIZSAvX1AE
+
 The provided code consists of two parts: a Google Apps Script and an HTML/JavaScript frontend.
 
 The Google Apps Script handles the server-side logic within Google Sheets. It creates a custom menu, opens a modal dialog, and contains functions for processing CSV data and importing it into the sheet. Additionally, it includes functions to set and retrieve CSV data and selected columns.
