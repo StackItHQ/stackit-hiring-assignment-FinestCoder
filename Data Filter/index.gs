@@ -1,11 +1,10 @@
-// Global variables to store CSV data, selected columns, and filtered data
 var csvData = null;
 var selectedColumns = [];
 var filteredData = null;
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('CSV Importer')
+  ui.createMenu('CSV Data Filter')
       .addItem('Import CSV', 'showDialog')
       .addToUi();
 }
@@ -18,9 +17,9 @@ function showDialog() {
 }
 
 function importCSVData(csv, columns) {
-  // Process the CSV data and selected columns and import them into the Google Sheet.
+  // Process the CSV data
   try {
-    // Use the filtered data if available; otherwise, use the original CSV data
+    // Use the filtered data or the original CSV data
     var dataToImport = filteredData || csv;
 
     var parsedCSV = Utilities.parseCsv(dataToImport);

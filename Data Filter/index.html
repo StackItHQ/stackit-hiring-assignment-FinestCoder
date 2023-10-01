@@ -3,7 +3,6 @@
 <head>
   <base target="_top">
   <style>
-    /* Add CSS styles as needed for your UI */
     .drop-area {
       border: 2px dashed #ccc;
       padding: 20px;
@@ -21,7 +20,6 @@
   <div>
     <h3>Select Columns to Import:</h3>
     <div id="columnCheckboxes">
-      <!-- Column checkboxes will be dynamically added here -->
     </div>
   </div>
   
@@ -33,7 +31,6 @@
     <select id="filterCondition">
       <option value="equals">Equals</option>
       <option value="contains">Contains</option>
-      <!-- Add more filter conditions as needed -->
     </select>
     <label for="filterValue">Value:</label>
     <input type="text" id="filterValue">
@@ -43,7 +40,7 @@
   <button id="importButton" onclick="importCSV()">Import CSV</button>
 
   <script>
-    // JavaScript code for handling file upload, column selection, and data filtering
+    // File upload, column selection, and data filtering
     var csvData = null;
     var selectedColumns = [];
     var filterColumn = document.getElementById("filterColumn");
@@ -174,10 +171,6 @@
       csvData = filteredRows.map(function (row) {
         return row.join(',');
       }).join('\n');
-
-      // Display or update the filtered data as needed
-      // For example, you can replace the contents of a <textarea> or display it in a table.
-      // You can also alert the user with the filtered data.
 
       alert('Data filtered successfully.');
     }
